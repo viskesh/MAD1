@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2 sidebar p-0">
+            <nav class="nav flex-column p-3">
+                <a class="nav-link" href="{{ url_for('admin_dashboard') }}">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a class="nav-link" href="{{ url_for('admin_doctors') }}">
+                    <i class="fas fa-user-md"></i> Doctors
+                </a>
+                <a class="nav-link" href="{{ url_for('admin_patients') }}">
+                    <i class="fas fa-users"></i> Patients
+                </a>
+                <a class="nav-link active text-primary" href="{{ url_for('admin_appointments') }}">
+                    <i class="fas fa-calendar-check"></i> Appointments
+                </a>
+            </nav>
+        </div>
+
+        <div class="col-md-10 p-4">
+            <h2 class="mb-4"><i class="fas fa-calendar-check"></i> All Appointments</h2>
+
+            <div class="card">
+                <div class="card-body">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Patient</th>
+                                <th>Doctor</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Status</th>
+                                <th>Reason</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for apt in appointments %}
+                            <tr>
+                                <td>{{ apt.id }}</td>
+                                <td>{{ apt.patient.full_name }}</td>
+                                <td>Dr. {{ apt.doctor.full_name }}</td>
+                                <td>{{ apt.appointment_date }}</td>
+                                <td>{{ apt.appointment_time.strftime('%H:%M') }}</td>
+                                <td>
+                                    <span class="badge bg-{{ 'success' if apt.status == 'Completed' else 'primary' if apt.status == 'Booked' else 'secondary' }}">
+                                        {{ apt.status }}
+                                    </span>
+                                </td>
+                                <td>{{ apt.reason or 'N/A' }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
