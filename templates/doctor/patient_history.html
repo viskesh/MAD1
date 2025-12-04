@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">
+        <i class="fas fa-user"></i> Patient: {{ patient.full_name }}
+    </h2>
+    
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">Patient Information</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Age:</strong> {{ patient.age }}</p>
+                    <p><strong>Gender:</strong> {{ patient.gender }}</p>
+                    <p><strong>Blood Group:</strong> {{ patient.blood_group }}</p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Phone:</strong> {{ patient.phone }}</p>
+                    <p><strong>Address:</strong> {{ patient.address }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">Medical History</h5>
+        </div>
+        <div class="card-body">
+            {% if appointments %}
+            {% for apt in appointments %}
+            <div class="mb-4 pb-3 border-bottom">
+                <h6 class="text-primary">{{ apt.appointment_date }} - {{ apt.appointment_time.strftime('%H:%M') }}</h6>
+                {% if apt.treatment %}
+                <p><strong>Diagnosis:</strong> {{ apt.treatment.diagnosis }}</p>
+                <p><strong>Prescription:</strong> {{ apt.treatment.prescription }}</p>
+                {% if apt.treatment.notes %}
+                <p><strong>Notes:</strong> {{ apt.treatment.notes }}</p>
+                {% endif %}
+                {% endif %}
+            </div>
+            {% endfor %}
+            {% else %}
+            <p class="text-muted">No medical history available</p>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="mt-3">
+        <a href="{{ url_for('doctor_dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2 sidebar p-0">
+            <nav class="nav flex-column p-3">
+                <a class="nav-link" href="{{ url_for('doctor_dashboard') }}">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a class="nav-link" href="{{ url_for('doctor_appointments') }}">
+                    <i class="fas fa-calendar-check"></i> Appointments
+                </a>
+                <a class="nav-link active" href="{{ url_for('doctor_availability') }}">
+                    <i class="fas fa-clock"></i> Availability
+                </a>
+            </nav>
+        </div>
+        
+        <div class="col-md-10 p-4">
+            <h2 class="mb-4"><i class="fas fa-clock"></i> Manage Availability</h2>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Add Availability</h5>
+                        </div>
+                        <div class="card-body">
+                            <form method="POST">
+                                <div class="mb-3">
+                                    <label class="form-label">Date *</label>
+                                    <input type="date" name="date" class="form-control" required min="{{ today }}">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Start Time *</label>
+                                    <input type="time" name="start_time" class="form-control" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">End Time *</label>
+                                    <input type="time" name="end_time" class="form-control" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">
+                                    <i class="fas fa-plus"></i> Add Availability
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Current Availability (Next 7 Days)</h5>
+                        </div>
+                        <div class="card-body">
+                            {% if availability_list %}
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Start Time</th>
+                                        <th>End Time</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for avail in availability_list %}
+                                    <tr>
+                                        <td>{{ avail.date }}</td>
+                                        <td>{{ avail.start_time.strftime('%H:%M') }}</td>
+                                        <td>{{ avail.end_time.strftime('%H:%M') }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            {% else %}
+                            <p class="text-muted">No availability set for the next 7 days</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
