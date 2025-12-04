@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2 sidebar p-0">
+            <nav class="nav flex-column p-3">
+                <a class="nav-link active" href="{{ url_for('patient_dashboard') }}">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a class="nav-link" href="{{ url_for('patient_doctors') }}">
+                    <i class="fas fa-user-md"></i> Find Doctors
+                </a>
+                <a class="nav-link" href="{{ url_for('patient_appointments') }}">
+                    <i class="fas fa-calendar"></i> My Appointments
+                </a>
+                <a class="nav-link" href="{{ url_for('patient_history') }}">
+                    <i class="fas fa-history"></i> Medical History
+                </a>
+                <a class="nav-link" href="{{ url_for('patient_profile') }}">
+                    <i class="fas fa-user"></i> My Profile
+                </a>
+            </nav>
+        </div>
+        
+        <div class="col-md-10 p-4">
+            <h2 class="mb-4">
+                <i class="fas fa-user"></i> Welcome, {{ patient.full_name }}!
+            </h2>
+
+            <div class="row mb-4">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Available Specializations</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                {% for dept in departments %}
+                                <div class="col-md-4 mb-3">
+                                    <div class="card h-100">
+                                        <div class="card-body text-center">
+                                            <i class="fas fa-heartbeat fa-3x text-primary mb-3"></i>
+                                            <h5>{{ dept.name }}</h5>
+                                            <p class="text-muted small">{{ dept.description }}</p>
+                                            <a href="{{ url_for('patient_doctors', department=dept.id) }}" class="btn btn-sm btn-primary">
+                                                View Doctors
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Upcoming Appointments</h5>
+                </div>
+                <div class="card-body">
+                    {% if upcoming_appointments %}
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Doctor</th>
+                                <th>Specialization</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for apt in upcoming_appointments %}
+                            <tr>
+                                <td>{{ apt.appointment_date }}</td>
+                                <td>{{ apt.appointment_time.strftime('%H:%M') }}</td>
+                                <td>Dr. {{ apt.doctor.full_name }}</td>
+                                <td>{{ apt.doctor.department.name }}</td>
+                                <td>
+                                    <span class="badge bg-primary">{{ apt.status }}</span>
+                                </td>
+                                <td>
+                                    <a href="{{ url_for('patient_cancel_appointment', id=apt.id) }}" 
+                                       class="btn btn-sm btn-danger"
+                                       onclick="return confirm('Are you sure you want to cancel this appointment?')">
+                                        Cancel
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                    <p class="text-muted">No upcoming appointments. <a href="{{ url_for('patient_doctors') }}">Book an appointment</a></p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

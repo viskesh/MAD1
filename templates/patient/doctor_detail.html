@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0"><i class="fas fa-user-md"></i> Dr. {{ doctor.full_name }}</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Specialization:</strong> {{ doctor.department.name }}</p>
+                            <p><strong>Qualification:</strong> {{ doctor.qualification }}</p>
+                            <p><strong>Experience:</strong> {{ doctor.experience_years }} years</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Phone:</strong> {{ doctor.phone }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">Available Slots (Next 7 Days)</h5>
+                </div>
+                <div class="card-body">
+                    {% if availability %}
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Start Time</th>
+                                <th>End Time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for slot in availability %}
+                            <tr>
+                                <td>{{ slot.date }}</td>
+                                <td>{{ slot.start_time.strftime('%H:%M') }}</td>
+                                <td>{{ slot.end_time.strftime('%H:%M') }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <div class="text-center mt-3">
+                        <a href="{{ url_for('patient_book_appointment', doctor_id=doctor.id) }}" class="btn btn-primary">
+                            <i class="fas fa-calendar-plus"></i> Book Appointment
+                        </a>
+                    </div>
+                    {% else %}
+                    <p class="text-muted">No availability set for the next 7 days.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="mt-3">
+                <a href="{{ url_for('patient_doctors') }}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to Doctors
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

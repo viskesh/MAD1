@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2 sidebar p-0">
+            <nav class="nav flex-column p-3">
+                <a class="nav-link" href="{{ url_for('patient_dashboard') }}">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a class="nav-link" href="{{ url_for('patient_doctors') }}">
+                    <i class="fas fa-user-md"></i> Find Doctors
+                </a>
+                <a class="nav-link" href="{{ url_for('patient_appointments') }}">
+                    <i class="fas fa-calendar"></i> My Appointments
+                </a>
+                <a class="nav-link active" href="{{ url_for('patient_history') }}">
+                    <i class="fas fa-history"></i> Medical History
+                </a>
+                <a class="nav-link" href="{{ url_for('patient_profile') }}">
+                    <i class="fas fa-user"></i> My Profile
+                </a>
+            </nav>
+        </div>
+        
+        <div class="col-md-10 p-4">
+            <h2 class="mb-4"><i class="fas fa-history"></i> My Medical History</h2>
+
+            {% if appointments %}
+            {% for apt in appointments %}
+            <div class="card mb-3">
+                <div class="card-header bg-success text-white">
+                    <strong>{{ apt.appointment_date }}</strong> - Dr. {{ apt.doctor.full_name }} ({{ apt.doctor.department.name }})
+                </div>
+                <div class="card-body">
+                    {% if apt.treatment %}
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="text-primary">Diagnosis</h6>
+                            <p>{{ apt.treatment.diagnosis }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-primary">Prescription</h6>
+                            <p>{{ apt.treatment.prescription }}</p>
+                        </div>
+                    </div>
+                    {% if apt.treatment.notes %}
+                    <hr>
+                    <h6 class="text-primary">Doctor's Notes</h6>
+                    <p>{{ apt.treatment.notes }}</p>
+                    {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="alert alert-info">
+                No medical history available yet.
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
