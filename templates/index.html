@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2 text-center">
+            <h1 class="display-4 mb-4">
+                Welcome to Hospital Management System
+            </h1>
+            <h6 class="display-6 mb-4" style="font: icon">
+                This is the main management system where every Hospital record is managed
+            </h6>
+            <div class="row">
+                <div class="col-4 mb-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <i class="fas fa-user-md fa-3x mb-3"></i>
+                            <h5>For Doctors</h5>
+                            <p>Manage appointments and patient records</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4 mb-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <i class="fas fa-user-injured fa-3x text-success mb-3"></i>
+                            <h5>For Patients</h5>
+                            <p>Book appointments and track health records</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4 mb-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <i class="fas fa-user-shield fa-3x text-danger mb-3"></i>
+                            <h5>For Admin</h5>
+                            <p>Manage hospital operations efficiently</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% if session.user_id %}
+                {% if session.get('role') == "admin" %}
+                <a href="{{ url_for('admin_dashboard') }}" class="btn btn-primary btn-lg me-3">
+                    <i class="fas fa-sign-in-alt"></i> Go to Dashboard
+                </a>
+                {% elif session.get('role')=="doctor"%}
+                <a href="{{ url_for('doctor_dashboard') }}" class="btn btn-primary btn-lg me-3">
+                <i class="fas fa-sign-in-alt"></i> Go to Dashboard
+                </a>
+                {% else %}
+                    <a href="{{ url_for('patient_dashboard') }}" class="btn btn-primary btn-lg me-3">
+                    <i class="fas fa-sign-in-alt"></i> Go to Dashboard
+                </a>
+                {% endif %}
+
+            {% endif %}
+
+            {% if not session.user_id %}
+            <div class="mt-4">
+                <a href="{{ url_for('login') }}" class="btn btn-primary btn-lg me-3">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </a>
+                <a href="{{ url_for('register') }}" class="btn btn-outline-primary btn-lg">
+                    <i class="fas fa-user-plus"></i> Register as Patient
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
